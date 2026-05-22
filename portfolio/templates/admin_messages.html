@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📬 받은 메시지 관리</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .admin-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 24px 60px;
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+        .admin-title {
+            font-size: 2rem;
+            font-weight: 800;
+        }
+        .admin-badge {
+            background: var(--accent-primary);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent-primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+            transition: var(--transition-fast);
+        }
+        .back-link:hover {
+            opacity: 0.8;
+        }
+        .message-card {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-glass-border);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            margin-bottom: 16px;
+            transition: var(--transition-smooth);
+            position: relative;
+        }
+        .message-card:hover {
+            border-color: rgba(108, 99, 255, 0.2);
+            transform: translateX(4px);
+        }
+        .message-card.unread {
+            border-left: 4px solid var(--accent-primary);
+        }
+        .badge-new {
+            display: inline-flex;
+            align-items: center;
+            background: var(--accent-primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            margin-left: 8px;
+            box-shadow: 0 2px 8px rgba(124, 106, 239, 0.4);
+            animation: pulse 2s infinite;
+            flex-shrink: 0;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        .msg-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .msg-sender-group {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .msg-sender {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .msg-email {
+            font-size: 0.85rem;
+            color: var(--accent-secondary);
+            margin-top: 2px;
+        }
+        .msg-date {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+        .msg-body {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            padding: 16px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--bg-glass-border);
+            margin-bottom: 16px;
+            white-space: pre-wrap;
+        }
+        .msg-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .msg-btn {
+            padding: 8px 18px;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: var(--font-primary);
+            cursor: pointer;
+            border: 1px solid var(--bg-glass-border);
+            background: transparent;
+            color: var(--text-secondary);
+            transition: var(--transition-fast);
+        }
+        .msg-btn:hover {
+            transform: translateY(-1px);
+        }
+        .msg-btn.read-btn:hover {
+            background: rgba(0, 212, 170, 0.1);
+            border-color: var(--accent-secondary);
+            color: var(--accent-secondary);
+        }
+        .msg-btn.reply-btn:hover {
+            background: rgba(108, 99, 255, 0.1);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+        .msg-btn.delete-btn:hover {
+            background: rgba(255, 107, 157, 0.1);
+            border-color: var(--accent-tertiary);
+            color: var(--accent-tertiary);
+        }
+        .empty-state {
+            text-align: center;
+            padding: 80px 24px;
+            color: var(--text-muted);
+        }
+        .empty-state .empty-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+        .empty-state h3 {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">KY.Lee</a>
+            <div class="nav-links">
+                <a href="/">포트폴리오</a>
+                <a href="/admin/messages" class="active">메시지 관리</a>
+                <a href="/admin/logout" style="color: var(--accent-tertiary, #ff6b9d); font-weight: 600;">로그아웃 🔒</a>
+                <button class="theme-toggle" id="themeToggle" title="테마 변경">
+                    <span class="icon-sun">☀️</span>
+                    <span class="icon-moon">🌙</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <a href="/" class="back-link">← 포트폴리오로 돌아가기</a>
+
+        <div class="admin-header">
+            <h1 class="admin-title">📬 받은 메시지</h1>
+            <span class="admin-badge">총 {{ messages|length }}건</span>
+        </div>
+
+        {% if messages %}
+            {% for msg in messages %}
+            <div class="message-card {{ 'unread' if not msg.is_read else '' }}" id="msg-{{ msg.id }}">
+                <div class="msg-header">
+                    <div>
+                        <div class="msg-sender-group">
+                            <span class="msg-sender">{{ msg.name }}</span>
+                            {% if not msg.is_read %}
+                            <span class="badge-new">NEW</span>
+                            {% endif %}
+                        </div>
+                        <div class="msg-email">{{ msg.email }}</div>
+                    </div>
+                    <div class="msg-date">{{ msg.created_at }}</div>
+                </div>
+                <div class="msg-body">{{ msg.message }}</div>
+                {% if msg.file_path %}
+                <div style="margin-bottom: 16px; font-size: 0.85rem; color: var(--text-muted);">
+                    <span style="color: var(--accent-secondary);">📎 첨부파일:</span>
+                    <a href="/uploads/{{ msg.file_path.split('\\')[-1].split('/')[-1] }}" target="_blank" style="color: var(--accent-primary); text-decoration: underline;">
+                        {{ msg.file_path.split('\\')[-1].split('/')[-1] }}
+                    </a>
+                </div>
+                {% endif %}
+                <div class="msg-actions">
+                    {% if not msg.is_read %}
+                    <button class="msg-btn read-btn" onclick="markRead({{ msg.id }})">
+                        ✓ 읽음 처리
+                    </button>
+                    {% endif %}
+                    <a href="mailto:{{ msg.email }}?subject=Re: 포트폴리오 문의&body=안녕하세요 {{ msg.name }}님,%0A%0A문의해주셔서 감사합니다.%0A%0A" class="msg-btn reply-btn">
+                        ✉️ 답장하기
+                    </a>
+                    <button class="msg-btn delete-btn" onclick="deleteMessage({{ msg.id }})">
+                        🗑️ 삭제
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">📭</div>
+                <h3>아직 받은 메시지가 없습니다</h3>
+                <p>포트폴리오의 연락 폼을 통해 메시지가 도착하면 여기에 표시됩니다.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        async function markRead(id) {
+            const res = await fetch(`/api/messages/${id}/read`, { method: 'POST' });
+            if (res.ok) {
+                const card = document.getElementById(`msg-${id}`);
+                card.classList.remove('unread');
+                const readBtn = card.querySelector('.read-btn');
+                if (readBtn) readBtn.remove();
+            }
+        }
+
+        async function deleteMessage(id) {
+            if (!confirm('정말 이 메시지를 삭제하시겠습니까?')) return;
+            const res = await fetch(`/api/messages/${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                const card = document.getElementById(`msg-${id}`);
+                card.style.opacity = '0';
+                card.style.transform = 'translateX(100px)';
+                card.style.transition = '0.4s ease';
+                setTimeout(() => {
+                    card.remove();
+                    // Update count
+                    const badge = document.querySelector('.admin-badge');
+                    const remaining = document.querySelectorAll('.message-card').length;
+                    badge.textContent = `총 ${remaining}건`;
+                    if (remaining === 0) location.reload();
+                }, 400);
+            }
+        }
+    </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

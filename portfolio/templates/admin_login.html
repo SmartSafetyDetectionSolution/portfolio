@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section" style="min-height: 70vh; display: flex; align-items: center; justify-content: center; padding: 120px 24px 60px;">
+    <div class="login-card" style="background: var(--bg-card); border: 1px solid var(--bg-glass-border); border-radius: var(--radius-lg); padding: 40px; width: 100%; max-width: 450px; box-shadow: var(--shadow-lg); backdrop-filter: blur(20px); text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 16px;">🔑</div>
+        <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 8px;">관리자 로그인</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 32px;">메시지 보드를 열람하기 위해 비밀번호를 입력해주세요.</p>
+
+        {% if error %}
+        <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #f87171; padding: 12px; border-radius: var(--radius-md); font-size: 0.85rem; margin-bottom: 24px; text-align: left; font-weight: 600;">
+            ⚠️ {{ error }}
+        </div>
+        {% endif %}
+
+        <form action="/admin/login" method="POST" style="display: flex; flex-direction: column; gap: 16px; text-align: left;">
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 8px;">
+                <label for="password" style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);">비밀번호</label>
+                <input type="password" name="password" id="password" placeholder="••••••••" required 
+                       style="background: var(--bg-secondary); border: 1px solid var(--bg-glass-border); color: var(--text-primary); padding: 12px; border-radius: var(--radius-md); outline: none; font-size: 1rem; transition: var(--transition-fast);">
+            </div>
+            
+            <button type="submit" class="btn-submit" 
+                    style="background: var(--accent-primary); color: white; border: none; padding: 12px; border-radius: var(--radius-md); font-size: 1rem; font-weight: 700; cursor: pointer; transition: var(--transition-bounce); margin-top: 8px; width: 100%;">
+                🔓 로그인
+            </button>
+        </form>
+    </div>
+</section>
+
+<style>
+    #password:focus {
+        border-color: var(--accent-primary) !important;
+        box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.2);
+    }
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        background: #6366f1;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+</style>
+{% endblock %}

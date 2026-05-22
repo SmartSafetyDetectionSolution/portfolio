@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="view-container">
+    <a href="/board" class="nav-back">← 목록으로 돌아가기</a>
+    
+    <header class="post-header">
+        <h1 class="post-title">{{ post.title }}</h1>
+        <div class="post-info">
+            <span>👤 {{ post.author }}</span>
+            <span>📅 {{ post.created_at }}</span>
+        </div>
+    </header>
+
+    <article class="post-content" id="postContent">
+        {% if post.youtube_url %}
+        <div class="youtube-container" id="dedicatedYoutube">
+            <!-- JS will parse the ID and insert iframe here -->
+        </div>
+        {% endif %}
+        {{ post.content }}
+    </article>
+
+    <!-- Post Actions (Aligned Right & Unified Style) -->
+    <footer class="post-actions" style="margin-top: 0; padding-bottom: 30px; border-top: none; display: flex; justify-content: flex-end; gap: 12px;">
+        <a href="/board/{{ post.id }}/edit" class="btn btn-outline" 
+            style="border: 1px solid var(--accent-primary); color: var(--accent-primary); padding: 10px 24px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; transition: var(--transition-smooth); text-align: center;">
+            수정하기
+        </a>
+        <form action="/board/{{ post.id }}/delete" method="POST" onsubmit="return confirm('정말로 삭제하시겠습니까?');" style="display:inline;">
+            <button type="submit" class="btn-delete-unified" 
+                style="background: rgba(244, 114, 182, 0.1); color: var(--accent-tertiary); border: 1px solid rgba(244, 114, 182, 0.3); padding: 10px 24px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: var(--transition-smooth); min-width: 100px;">
+                삭제하기
+            </button>
+        </form>
+    </footer>
+
+
+    <!-- 댓글 섹션 -->
+    <section class="comment-section">
+        <h3 class="comment-title">댓글 ({{ comments|length }})</h3>
+        
+        <!-- 댓글 작성 폼 (Premium Redesign) -->
+        <div class="comment-form-wrapper" style="background: var(--bg-card); border: 1px solid var(--bg-glass-border); border-radius: 20px; padding: 24px; margin-bottom: 40px; box-shadow: var(--shadow-md); backdrop-filter: blur(10px);">
+            <form action="/board/{{ post.id }}/comments" method="POST" class="comment-form" style="background: transparent; padding: 0; margin-bottom: 0;">
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <span style="font-size: 1rem; color: var(--accent-primary); font-weight: 700; min-width: 60px;">작성자</span>
+                        <input type="text" name="author" placeholder="성함을 입력하세요" required 
+                            style="background: var(--bg-glass); border: 1px solid var(--bg-glass-border); color: var(--text-primary); padding: 12px 18px; border-radius: 12px; width: 220px; outline: none; transition: all 0.3s ease; font-weight: 500;">
+                    </div>
+                    <div style="display: flex; gap: 18px; align-items: flex-end;">
+                        <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                            <textarea name="content" placeholder="따뜻한 댓글로 강연님을 응원해주세요! ✨" required 
+                                style="width: 100%; background: var(--bg-glass); border: 1px solid var(--bg-glass-border); color: var(--text-primary); padding: 18px; border-radius: 16px; height: 120px; resize: none; outline: none; transition: all 0.3s ease; line-height: 1.6; font-size: 1rem;"></textarea>
+                        </div>
+                        <button type="submit" class="btn-comment-submit" 
+                            style="background: var(--gradient-hero); color: white; border: none; height: 120px; width: 110px; font-weight: 800; border-radius: 16px; font-size: 1.1rem; cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 8px 20px rgba(129, 140, 248, 0.3); display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.3;">
+                            댓글<br>등록
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+        <!-- 댓글 목록 -->
+        <div class="comment-list">
+            {% for comment in comments %}
+            <div class="comment-item">
+                <div class="comment-header">
+                    <span class="comment-author">👤 {{ comment.author }}</span>
+                    <span class="comment-date">{{ comment.created_at[:16] }}</span>
+                    <form action="/board/comments/{{ comment.id }}/delete" method="POST" style="display:inline;">
+                        <input type="hidden" name="post_id" value="{{ post.id }}">
+                        <button type="submit" class="btn-comment-delete" onclick="return confirm('댓글을 삭제하시겠습니까?');">삭제</button>
+                    </form>
+                </div>
+                <div class="comment-body">{{ comment.content }}</div>
+            </div>
+            {% else %}
+            <p class="empty-msg" style="padding: 20px 0;">첫 번째 댓글을 남겨보세요!</p>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+
+<style>
+    .view-container {
+        max-width: 900px;
+        margin: 20px auto 60px; /* 120px에서 20px로 축소 */
+        padding: 40px;
+
+        background: var(--bg-card);
+        border: 1px solid var(--bg-glass-border);
+        border-radius: var(--radius-lg);
+        backdrop-filter: blur(20px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .post-header {
+        border-bottom: 1px solid var(--bg-glass-border);
+        padding-bottom: 24px;
+        margin-bottom: 30px;
+    }
+
+    .post-title {
+        font-size: var(--font-size-3xl);
+        font-weight: 800;
+        margin-bottom: 16px;
+        color: var(--text-primary);
+    }
+
+    .post-info {
+        display: flex;
+        gap: 20px;
+        color: var(--text-muted);
+        font-size: var(--font-size-sm);
+    }
+
+    .post-content {
+        font-size: var(--font-size-base);
+        line-height: 1.8;
+        color: var(--text-secondary);
+        white-space: pre-wrap;
+        margin-bottom: 40px;
+    }
+
+    .post-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid var(--bg-glass-border);
+        padding-top: 24px;
+    }
+
+    .btn-delete {
+        background: rgba(244, 114, 182, 0.1);
+        color: var(--accent-tertiary);
+        border: 1px solid rgba(244, 114, 182, 0.2);
+        padding: 10px 20px;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        font-weight: 600;
+        transition: var(--transition-smooth);
+    }
+
+    .btn-delete:hover {
+        background: rgba(244, 114, 182, 0.2);
+        border-color: var(--accent-tertiary);
+        transform: translateY(-2px);
+    }
+    
+    .nav-back {
+        margin-bottom: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text-muted);
+        font-size: var(--font-size-sm);
+        transition: var(--transition-fast);
+    }
+    
+    .nav-back:hover {
+        color: var(--accent-primary);
+    }
+
+    /* 댓글 스타일 */
+    .comment-section {
+        margin-top: 50px;
+        padding-top: 30px;
+        border-top: 1px solid var(--bg-glass-border);
+    }
+    .comment-title {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        color: var(--text-primary);
+    }
+    .comment-form {
+        background: var(--bg-glass);
+        padding: 20px;
+        border-radius: var(--radius-md);
+        margin-bottom: 30px;
+    }
+    .comment-form-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+    .comment-form-row input, .comment-form-row textarea {
+        background: var(--bg-secondary);
+        border: 1px solid var(--bg-glass-border);
+        color: white;
+        padding: 10px;
+        border-radius: 8px;
+        outline: none;
+    }
+    .comment-form-row input { width: 150px; }
+    .comment-form-row textarea { flex: 1; height: 80px; resize: none; }
+    
+    .comment-item {
+        padding: 15px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .comment-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 8px;
+        font-size: 0.85rem;
+    }
+    .comment-author { font-weight: 600; color: var(--accent-primary); }
+    .comment-date { color: var(--text-muted); }
+    .btn-comment-delete {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        font-size: 0.75rem;
+    }
+    .btn-comment-delete:hover { color: var(--accent-tertiary); }
+    .comment-body { color: var(--text-secondary); line-height: 1.5; font-size: 0.95rem; }
+
+    .btn-comment-submit:hover {
+        transform: translateY(-4px) scale(1.05);
+        filter: brightness(1.1);
+        box-shadow: 0 12px 25px rgba(129, 140, 248, 0.5) !important;
+    }
+
+    .youtube-container {
+
+        position: relative;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+        max-width: 100%;
+        margin: 20px 0;
+        border-radius: 12px;
+        box-shadow: var(--shadow-md);
+    }
+
+    .youtube-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const contentArea = document.getElementById('postContent');
+        const dedicatedArea = document.getElementById('dedicatedYoutube');
+        
+        // 1. 전용 필드 유튜브 처리
+        const dedicatedUrl = "{{ post.youtube_url or '' }}";
+        if (dedicatedArea && dedicatedUrl) {
+            const videoId = extractVideoId(dedicatedUrl);
+            if (videoId) {
+                dedicatedArea.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>`;
+            }
+        }
+
+        // 2. 본문 내 유튜브 링크 자동 처리 (하위 호환성)
+        const content = contentArea.innerHTML;
+        const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/g;
+        
+        const newContent = content.replace(youtubeRegex, (match, videoId) => {
+            // 전용 필드가 있는 경우 본문 내 링크는 임베드하지 않고 링크만 남김
+            if (dedicatedUrl) return `<a href="${match}" target="_blank" style="color:var(--accent-primary); font-size:0.9rem;">🔗 유튜브 링크</a>`;
+            
+            return `
+                <div class="youtube-container">
+                    <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
+                </div>
+            `;
+        });
+        
+        contentArea.innerHTML = newContent;
+
+        function extractVideoId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length == 11) ? match[2] : null;
+        }
+    });
+</script>
+{% endblock %}
+

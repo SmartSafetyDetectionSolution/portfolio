@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="form-container">
+    <a href="/board" class="nav-back">← 목록으로 돌아가기</a>
+    <h1 class="form-title">게시글 {{ action }}</h1>
+    
+    <form action="{{ '/board/create' if not post else '/board/' ~ post.id ~ '/edit' }}" method="POST" class="post-form">
+        <div class="form-group">
+            <label for="title">제목</label>
+            <input type="text" id="title" name="title" value="{{ post.title if post else '' }}" placeholder="제목을 입력하세요" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="author">작성자</label>
+            <input type="text" id="author" name="author" value="{{ post.author if post else '' }}" placeholder="성함을 입력하세요" required>
+        </div>
+
+
+        <div class="form-group">
+            <label for="youtube_url">유튜브 영상 주소 (선택)</label>
+            <input type="text" id="youtube_url" name="youtube_url" value="{{ post.youtube_url if post else '' }}" placeholder="https://www.youtube.com/watch?v=...">
+            <small style="color: var(--text-muted); display: block; margin-top: 5px;">영상을 공유하고 싶을 때만 입력해주세요.</small>
+        </div>
+
+        
+        <div class="form-group">
+            <label for="content">내용 (유튜브 링크 입력 시 자동 임베드됩니다)</label>
+            <textarea id="content" name="content" rows="12" placeholder="내용을 입력하세요..." required>{{ post.content if post else '' }}</textarea>
+        </div>
+        
+        <div class="form-submit">
+            <button type="submit" class="btn btn-primary">{{ action }} 완료</button>
+            <a href="/board" class="btn btn-outline">취소</a>
+        </div>
+    </form>
+</div>
+
+<style>
+    .form-container {
+        max-width: 800px;
+        margin: 120px auto 60px;
+        padding: 40px;
+        background: var(--bg-card);
+        border: 1px solid var(--bg-glass-border);
+        border-radius: var(--radius-lg);
+        backdrop-filter: blur(20px);
+    }
+
+    .form-title {
+        font-size: var(--font-size-2xl);
+        font-weight: 800;
+        margin-bottom: 30px;
+        color: var(--text-primary);
+    }
+
+    .post-form .form-group {
+        margin-bottom: 24px;
+    }
+
+    .post-form label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--text-secondary);
+        font-weight: 500;
+    }
+
+    .post-form input, .post-form textarea {
+        width: 100%;
+        padding: 14px;
+        background: var(--bg-glass);
+        border: 1px solid var(--bg-glass-border);
+        border-radius: var(--radius-md);
+        color: var(--text-primary);
+        font-family: inherit;
+        outline: none;
+        transition: var(--transition-fast);
+    }
+
+    .post-form input:focus, .post-form textarea:focus {
+        border-color: var(--accent-primary);
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .form-submit {
+        display: flex;
+        gap: 12px;
+        margin-top: 30px;
+    }
+
+    .nav-back {
+        margin-bottom: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text-muted);
+        font-size: var(--font-size-sm);
+    }
+    .nav-back:hover { color: var(--accent-primary); }
+</style>
+{% endblock %}

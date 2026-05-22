@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section" id="projects">
+    <span class="section-label">Projects</span>
+    <h2 class="section-title">주요 프로젝트</h2>
+    <p class="section-subtitle">직접 기획하고 인터랙션을 구현한 결과물들</p>
+
+    <div class="projects-filter">
+        <button class="filter-btn active" data-filter="all">전체</button>
+        <button class="filter-btn" data-filter="web">웹 개발</button>
+        <button class="filter-btn" data-filter="ai">AI / Vision</button>
+    </div>
+
+    <div class="projects-grid">
+        <!-- Project 1: MY FIT.LOG -->
+        <div class="project-card animate-on-scroll" data-category="web">
+            <div class="project-thumbnail"
+                style="background: linear-gradient(135deg, #4f46e522, #0ea5e922); display: flex; align-items: center; justify-content: center;">
+                <div style="font-size: 4rem;">🧭</div>
+            </div>
+            <div class="project-content">
+                <span class="project-type web">Web Development</span>
+                <h3 class="project-title">MY FIT.LOG (커리어 플랫폼)</h3>
+                <p class="project-description">
+                    사용자의 커리어 성장을 기록하고 설계하는 맞춤형 플랫폼입니다. 직관적인 UI를 통해 복잡한 데이터를 시각화했습니다.
+                </p>
+                <div class="project-tech">
+                    <span>Flask</span>
+                    <span>SQLite</span>
+                    <span>Scrapy</span>
+                    <span>Pandas</span>
+                </div>
+                <div class="project-links">
+                    <button class="project-link btn-detail" 
+                        data-title="MY FIT.LOG (커리어 플랫폼)"
+                        data-type="Full Stack"
+                        data-description="채용 트렌드 및 AI 직군 분석, 내 스킬 진단 등 커리어 성장에 필요한 인사이트를 제공하는 플랫폼입니다."
+                        data-tech="Flask, SQLite, Scrapy, Pandas"
+                        data-link="#"
+                        data-features='["AI 직무 역량 분석 키워드 추출", "사용자 스킬 트리 진단 시스템"]'
+                        style="cursor: pointer;">🔍 상세보기</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project 2: Smart Safety Detection -->
+        <div class="project-card animate-on-scroll" data-category="ai">
+            <div class="project-thumbnail"
+                style="background: linear-gradient(135deg, #10b98122, #3b82f622); display: flex; align-items: center; justify-content: center;">
+                <div style="font-size: 4rem;">🛡️</div>
+            </div>
+            <div class="project-content">
+                <span class="project-type ai">AI Desktop Application</span>
+                <h3 class="project-title">Smart Safety Detection</h3>
+                <p class="project-description">
+                    CCTV 영상에서 낙상 사고와 안전모 미착용을 실시간으로 감지하는 Windows 전용 오프라인 AI 솔루션입니다.
+                </p>
+                <div class="project-tech">
+                    <span>PySide6</span>
+                    <span>ONNX Runtime</span>
+                    <span>OpenCV</span>
+                    <span>SQLite</span>
+                </div>
+                <div class="project-links">
+                    <button class="project-link btn-detail"
+                        data-title="Smart Safety Detection"
+                        data-type="AI Safety Desktop App"
+                        data-description="작업 현장의 안전을 지키는 실시간 CCTV 모니터링 데스크톱 앱입니다. 낙상 및 헬멧 미착용을 감지하며, 오프라인 환경에서도 독립 실행이 가능하도록 최적화되었습니다."
+                        data-tech="Python 3.12, PySide6, ONNX Runtime, OpenCV, PyInstaller"
+                        data-link="https://ai-safety-portfolio-flame.vercel.app/"
+                        data-features='["RTSP 실시간 영상 스트리밍 분석", "AI 모델 기반 헬멧/낙상 감지 및 스마트 알람", "이벤트 로깅 및 스냅샷 저장 대시보드", "단일 실행 파일(EXE) 오프라인 배포 지원"]'
+                        style="cursor: pointer;">🔍 상세보기</button>
+                    <a href="https://ai-safety-portfolio-flame.vercel.app/" target="_blank" class="project-link" style="text-decoration: none; display: inline-block; background: var(--accent-secondary, #10b981); color: white; padding: 4px 12px; border-radius: 6px; font-weight: bold; margin-left: 8px; font-size: 0.85rem;">🌐 프로젝트 방문</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project 3: AI Scheduler & Diary -->
+        <div class="project-card animate-on-scroll" data-category="web">
+            <div class="project-thumbnail"
+                style="background: linear-gradient(135deg, #c084fc22, #db277722); display: flex; align-items: center; justify-content: center;">
+                <div style="font-size: 4rem;">📔</div>
+            </div>
+            <div class="project-content">
+                <span class="project-type web">Web Development & AI</span>
+                <h3 class="project-title">AI Scheduler & Diary (AI 다이어리)</h3>
+                <p class="project-description">
+                    Gemini AI 비서와 감성 다이어리를 결합한 다기능 웰니스 플래너입니다. 레트로 싸이월드를 비롯한 7가지 테마와 드로잉 캔버스, BGM 플레이어를 제공합니다.
+                </p>
+                <div class="project-tech">
+                    <span>React (Vite)</span>
+                    <span>Gemini API</span>
+                    <span>HTML5 Canvas</span>
+                    <span>BGM Player</span>
+                </div>
+                <div class="project-links">
+                    <button class="project-link btn-detail"
+                        data-title="AI Scheduler & Diary (AI 다이어리)"
+                        data-type="AI Planner & Interactive Diary"
+                        data-description="인공지능 비서가 사용자의 자연어 명령을 해석해 일정을 자동으로 생성하고 추천 BGM을 제공하는 지능형 플래너입니다. 사용자가 직접 텍스트나 드로잉 패드로 하루를 기록하면 XP를 획득하여 레벨이 오르고 숨겨진 테마를 해금할 수 있습니다."
+                        data-tech="React, Gemini API, HTML5 Canvas API, YouTube IFrame API"
+                        data-link="/diary/"
+                        data-features='["자연어 명령어 일정 추가 AI Chatbot (Gemini)", "HTML5 Canvas 기반 필기/손그림 드로잉 패드", "싸이월드/라벤더 등 7종의 프리미엄 테마 프리셋", "YouTube API & HTML5 기반 집중 BGM 및 알람 타이머"]'
+                        style="cursor: pointer;">🔍 상세보기</button>
+                    <a href="/diary/" target="_blank" class="project-link" style="text-decoration: none; display: inline-block; background: var(--accent-primary, #6366f1); color: white; padding: 4px 12px; border-radius: 6px; font-weight: bold; margin-left: 8px; font-size: 0.85rem;">🌐 라이브 데모</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<!-- Project Detail Modal -->
+<div id="projectModal" class="modal">
+    <div class="modal-container">
+        <div class="modal-header">
+            <span class="modal-close" id="modalClose">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div id="modalImagePlaceholder" class="modal-image" style="background: var(--gradient-card); display: flex; align-items: center; justify-content: center; font-size: 5rem;">🚀</div>
+            <div class="modal-tags" id="modalTags"></div>
+            <h2 class="modal-title" id="modalTitle">Project Title</h2>
+            <p class="modal-description" id="modalDescription">Detailed description...</p>
+            <h3 style="margin-bottom: 16px; font-size: 1.2rem;">주요 기능</h3>
+            <div class="modal-features" id="modalFeatures"></div>
+            <div class="modal-footer">
+                <a href="#" id="modalLink" target="_blank" class="btn btn-primary">🌐 프로젝트 방문</a>
+                <a href="#" id="modalGithub" target="_blank" class="btn btn-outline">🔗 GitHub 코드</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

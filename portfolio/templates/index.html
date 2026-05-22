@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero" id="hero">
+    <div class="hero-container">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="dot"></span>
+                현재 구직 중
+            </div>
+            <h1 class="hero-title">
+                미학과 기술의 경계에서
+                <span class="highlight">직관적인 경험을 설계합니다</span>
+            </h1>
+
+
+            <p class="hero-role" style="color: var(--accent-primary); font-size: 1.4rem; font-weight: 700; margin-bottom: 20px;">
+                <span class="typed-text"></span>
+            </p>
+            <p class="hero-description">
+                미적 감각과 기술력을 결합하여 직관적인 웹 인터페이스를 구축합니다.<br>
+                <strong>사용자 경험(UX)을 최우선으로 고려하는 프론트엔드 개발자</strong>로서,<br>
+                견고한 서버 로직에 대한 이해를 바탕으로 완성도 높은 서비스를 만듭니다.
+            </p>
+            <div class="hero-buttons">
+                <a href="/projects" class="btn btn-primary">
+                    📂 프로젝트 보기
+                </a>
+                <a href="/contact" class="btn btn-outline">
+                    ✉️ 연락하기
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number" data-counter="10" data-suffix="+">10+</div>
+                    <div class="stat-label">프로젝트</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-counter="15" data-suffix="+">15+</div>
+                    <div class="stat-label">기술 스택</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-counter="100" data-suffix="%">100%</div>
+                    <div class="stat-label">열정</div>
+                </div>
+
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="profile-wrapper">
+                <div class="profile-ring"></div>
+                <div class="profile-img-mask">
+                    <img src="{{ url_for('static', filename='images/profile.png') }}" alt="이강연 프로필" class="profile-img" loading="eager">
+                </div>
+                <div class="profile-decoration">🎨</div>
+                <div class="profile-decoration">⚙️</div>
+                <div class="profile-decoration">🚀</div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // 히어로 전용 타이핑 효과 (main.js의 TypeWriter 클래스 활용)
+    document.addEventListener('DOMContentLoaded', () => {
+        const typedElement = document.querySelector('.typed-text');
+        if (typedElement) {
+            const words = ['UX-Focused Frontend Developer', 'FE & Server Logic Understanding', 'UI/UX Interaction Specialist'];
+            new TypeWriter(typedElement, words, 2000);
+        }
+    });
+</script>
+{% endblock %}

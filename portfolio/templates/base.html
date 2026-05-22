@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이강연 | Frontend Developer Portfolio</title>
+    
+    <!-- 테마 우선 적용 및 유지 스크립트 -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            // DOM이 로드되기 전에 미리 속성을 설정하여 깜박임 방지
+            window.addEventListener('DOMContentLoaded', () => {
+                document.body.setAttribute('data-theme', savedTheme);
+                const themeToggle = document.getElementById('themeToggle');
+                if (themeToggle) {
+                    themeToggle.textContent = savedTheme === 'light' ? '🌙' : '☀️';
+                }
+            });
+        })();
+    </script>
+
+    <meta name="description" content="사용자 경험(UX)을 디자인하고 서버 로직을 이해하는 프론트엔드 개발자 이강연입니다.">
+
+    <meta name="keywords" content="이강연, 프론트엔드, Frontend, UX/UI, Python, AI 시각화">
+    <meta property="og:title" content="이강연 | UX-Focused Frontend Developer">
+    <meta property="og:description" content="사용자 경험을 최우선으로 생각하는 프론트엔드 개발자 이강연의 포트폴리오">
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
+</head>
+
+<body>
+
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">
+                <div class="logo-mark">KY</div>
+                <span class="logo-text">이강연</span>
+                <span class="logo-badge">DEV</span>
+            </a>
+
+            <div class="nav-links" id="navLinks">
+                <a href="/" class="{{ 'active' if active_page == 'home' else '' }}">Home</a>
+                <a href="/about" class="{{ 'active' if active_page == 'about' else '' }}">소개</a>
+                <a href="/skills" class="{{ 'active' if active_page == 'skills' else '' }}">기술스택</a>
+                <a href="/projects" class="{{ 'active' if active_page == 'projects' else '' }}">프로젝트</a>
+                <a href="/diary/" target="_blank" style="position: relative;">AI 다이어리 <span style="position: absolute; top: -8px; right: -12px; font-size: 0.6rem; background: var(--accent-primary, #6366f1); color: white; padding: 1px 4px; border-radius: 4px; font-weight: bold; border: 1px solid var(--bg-glass-border);">HOT</span></a>
+                <a href="/experience" class="{{ 'active' if active_page == 'experience' else '' }}">경험</a>
+                <a href="/board" class="{{ 'active' if active_page == 'board' else '' }}">게시판</a>
+                <a href="/contact" class="nav-cta {{ 'active' if active_page == 'contact' else '' }}">연락하기</a>
+                <button class="theme-toggle" id="themeToggle" title="테마 변경">
+                    <span class="icon-sun">☀️</span>
+                    <span class="icon-moon">🌙</span>
+                </button>
+            </div>
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- AI Chatbot Widget -->
+    <div id="aiChatbot" class="ai-chatbot">
+        <div class="chat-header">
+            <span class="chat-title">🤖 KY.Lee AI 챗봇</span>
+            <button id="closeChat" class="chat-close">&times;</button>
+        </div>
+        <div id="chatMessages" class="chat-messages">
+            <div class="message ai-message">안녕하세요! 이강연 개발자에 대해 궁금한 점을 물어보세요! (예: "장점이 뭐야?", "어떤 기술 써?")</div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="질문을 입력해주세요..." autocomplete="off">
+            <button id="sendChat" class="chat-send">전송</button>
+        </div>
+    </div>
+    
+    <button id="chatToggle" class="chat-toggle">💬 AI 어시스턴트</button>
+
+    <style>
+        .chat-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(129, 140, 248, 0.4);
+            z-index: 1000;
+            transition: var(--transition-smooth);
+        }
+        .chat-toggle:hover { transform: translateY(-5px); }
+        .ai-chatbot {
+            position: fixed;
+            bottom: 90px;
+            right: 30px;
+            width: 350px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--bg-glass-border);
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+            overflow: hidden;
+            animation: slideUp 0.3s ease forwards;
+            backdrop-filter: blur(20px);
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .ai-chatbot.active { display: flex; }
+        .chat-header {
+            background: rgba(129, 140, 248, 0.15);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--bg-glass-border);
+        }
+        .chat-title { font-weight: bold; color: var(--text-primary); }
+        .chat-close { background: none; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; }
+        .chat-messages {
+            height: 350px;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .message { 
+            padding: 10px 14px; 
+            border-radius: 14px; 
+            font-size: 0.9rem; 
+            max-width: 85%; 
+            line-height: 1.5; 
+            word-break: break-word;
+        }
+        .ai-message { 
+            background: var(--bg-glass); 
+            color: var(--text-primary); 
+            align-self: flex-start; 
+            border-bottom-left-radius: 4px;
+            border: 1px solid var(--bg-glass-border);
+        }
+        .user-message { 
+            background: var(--accent-primary); 
+            color: white; 
+            align-self: flex-end; 
+            border-bottom-right-radius: 4px;
+        }
+        .chat-input-area {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid var(--bg-glass-border);
+            background: var(--bg-glass);
+        }
+        #chatInput {
+            flex: 1;
+            background: var(--bg-secondary);
+            border: 1px solid var(--bg-glass-border);
+            color: var(--text-primary);
+            padding: 10px;
+            border-radius: 8px;
+            outline: none;
+        }
+        .chat-send {
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0 15px;
+            margin-left: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+
+    <!-- Footer -->
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-text">
+                © 2026 이강연. All rights reserved. Built with Flask & ❤️
+            </div>
+            <div class="footer-socials">
+                <a href="https://github.com/97lky971102-coder" target="_blank" class="social-link" title="GitHub">💻</a>
+                <a href="#" class="social-link" title="LinkedIn">💼</a>
+                <a href="#" class="social-link" title="Blog">📝</a>
+                <a href="mailto:ky971102@naver.com" class="social-link" title="Email">📧</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+    <script>
+        // Global AI Chatbot Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatToggle = document.getElementById('chatToggle');
+            const chatbot = document.getElementById('aiChatbot');
+            const closeChat = document.getElementById('closeChat');
+            const sendBtn = document.getElementById('sendChat');
+            const chatInput = document.getElementById('chatInput');
+            const chatMessages = document.getElementById('chatMessages');
+
+            if (chatToggle && chatbot) {
+                chatToggle.addEventListener('click', () => chatbot.classList.toggle('active'));
+                closeChat.addEventListener('click', () => chatbot.classList.remove('active'));
+
+                async function sendMessage() {
+                    const text = chatInput.value.trim();
+                    if (!text) return;
+
+                    // User message
+                    const userDiv = document.createElement('div');
+                    userDiv.className = 'message user-message';
+                    userDiv.textContent = text;
+                    chatMessages.appendChild(userDiv);
+                    chatInput.value = '';
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                    // Typing...
+                    const typingDiv = document.createElement('div');
+                    typingDiv.className = 'message ai-message';
+                    typingDiv.textContent = '...';
+                    chatMessages.appendChild(typingDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                    try {
+                        const res = await fetch('/api/chat', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ message: text })
+                        });
+                        const data = await res.json();
+                        chatMessages.removeChild(typingDiv);
+                        
+                        const aiDiv = document.createElement('div');
+                        aiDiv.className = 'message ai-message';
+                        aiDiv.innerHTML = data.response.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                        chatMessages.appendChild(aiDiv);
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    } catch (err) {
+                        chatMessages.removeChild(typingDiv);
+                    }
+                }
+
+                sendBtn.addEventListener('click', sendMessage);
+                chatInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') sendMessage();
+                });
+            }
+        });
+    </script>
+    
+    {% block scripts %}{% endblock %}
+
+</body>
+
+</html>

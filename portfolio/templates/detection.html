@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 부유물 탐지 시스템 | 이강연 포트폴리오</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .detection-container {
+            max-width: 1200px;
+            margin: 100px auto;
+            padding: 0 24px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .video-feed-wrapper {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-glass-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+            aspect-ratio: 16 / 9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-feed-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+        }
+
+        .detection-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .status-badge {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            padding: 8px 16px;
+            border-radius: 50px;
+            border: 1px solid var(--accent-secondary);
+            color: var(--accent-secondary);
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-badge.scanning .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-secondary);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        .stats-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-glass-border);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            backdrop-filter: blur(12px);
+            transition: var(--transition-smooth);
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-4px);
+        }
+
+        .stat-card h3 {
+            font-size: var(--font-size-sm);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .stat-card .value {
+            font-size: var(--font-size-2xl);
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .stat-card .value span {
+            font-size: var(--font-size-base);
+            color: var(--accent-primary);
+            margin-left: 4px;
+        }
+
+        .control-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-glass-border);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin-top: 24px;
+        }
+
+        .btn-control {
+            width: 100%;
+            margin-bottom: 12px;
+            justify-content: center;
+        }
+
+        .log-container {
+            margin-top: 24px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border: 1px solid var(--bg-glass-border);
+        }
+
+        .log-entry {
+            margin-bottom: 6px;
+            border-left: 2px solid var(--accent-primary);
+            padding-left: 10px;
+        }
+
+        .log-entry.alert {
+            border-left-color: var(--accent-tertiary);
+            color: var(--accent-tertiary);
+        }
+
+        @media (max-width: 992px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar scrolled">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">
+                <span class="logo-bracket">[</span>
+                <span class="logo-text">KANGYEON</span>
+                <span class="logo-bracket">]</span>
+            </a>
+            <div class="nav-links">
+                <a href="/">홈으로 돌아가기</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="detection-container">
+        <header class="section-header">
+            <span class="section-label">AI Computer Vision</span>
+            <h1 class="section-title">해양 부유물 실시간 탐지 시스템</h1>
+            <p class="section-subtitle">YOLOv8 기반의 딥러닝 모델을 활용하여 실시간으로 정체 불명의 부유물 및 해양 쓰레기를 탐지하고 시각화합니다.</p>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- Video Feed Sector -->
+            <div class="video-feed-wrapper">
+                <div class="detection-overlay">
+                    <div class="status-badge scanning">
+                        <div class="dot"></div>
+                        LIVE MONITORING
+                    </div>
+                    <div class="status-badge" style="border-color: var(--accent-primary); color: var(--accent-primary);">
+                        <i class="fas fa-microchip"></i> YOLOv8n Engine Active
+                    </div>
+                </div>
+                <img id="video-feed" src="{{ url_for('video_feed') }}" alt="실시간 탐지 피드">
+            </div>
+
+            <!-- Stats & Controls -->
+            <div class="stats-panel">
+                <div class="stat-card">
+                    <h3>현재 탐지 개수</h3>
+                    <div class="value" id="current-count">0 <span>Objects</span></div>
+                </div>
+                <div class="stat-card">
+                    <h3>평균 신뢰도</h3>
+                    <div class="value" id="avg-confidence">0 <span>%</span></div>
+                </div>
+                <div class="stat-card">
+                    <h3>시스템 가동 시간</h3>
+                    <div class="value" id="uptime">00:00:00</div>
+                </div>
+
+                <div class="control-panel">
+                    <button class="btn btn-primary btn-control" onclick="toggleAnalysis()">
+                        <i class="fas fa-pause"></i> 분석 일시정지
+                    </button>
+                    <button class="btn btn-outline btn-control" onclick="clearLogs()">
+                        <i class="fas fa-trash"></i> 로그 초기화
+                    </button>
+                    
+                    <div class="log-container" id="log-box">
+                        <div class="log-entry">[SYSTEM] AI 탐지 엔진 초기화 완료...</div>
+                        <div class="log-entry">[SYSTEM] 카메라 스트리밍 연결됨.</div>
+                        <div class="log-entry">[INFO] 실시간 환경 분석을 시작합니다.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let isAnalyzing = true;
+        let startTime = new Date();
+
+        function updateUptime() {
+            const now = new Date();
+            const diff = Math.floor((now - startTime) / 1000);
+            const h = String(Math.floor(diff / 3600)).padStart(2, '0');
+            const m = String(Math.floor((diff % 3600) / 60)).padStart(2, '0');
+            const s = String(diff % 60).padStart(2, '0');
+            document.getElementById('uptime').textContent = `${h}:${m}:${s}`;
+        }
+
+        setInterval(updateUptime, 1000);
+
+        function toggleAnalysis() {
+            const btn = event.currentTarget;
+            isAnalyzing = !isAnalyzing;
+            const img = document.getElementById('video-feed');
+            
+            if (isAnalyzing) {
+                img.src = "{{ url_for('video_feed') }}";
+                btn.innerHTML = '<i class="fas fa-pause"></i> 분석 일시정지';
+                addLog("[SYSTEM] 분석이 재개되었습니다.");
+            } else {
+                img.src = ""; // Stop the feed
+                btn.innerHTML = '<i class="fas fa-play"></i> 분석 시작';
+                addLog("[SYSTEM] 분석이 일시정지되었습니다.");
+            }
+        }
+
+        function addLog(msg, isAlert = false) {
+            const logBox = document.getElementById('log-box');
+            const entry = document.createElement('div');
+            entry.className = isAlert ? 'log-entry alert' : 'log-entry';
+            const time = new Date().toLocaleTimeString();
+            entry.textContent = `[${time}] ${msg}`;
+            logBox.prepend(entry);
+        }
+
+        function clearLogs() {
+            document.getElementById('log-box').innerHTML = '<div class="log-entry">[SYSTEM] 로그가 초기화되었습니다.</div>';
+        }
+
+        // Mock updates for demonstration if not connected to backend stats
+        setInterval(() => {
+            if(isAnalyzing) {
+                // In a real app, these would come from an API
+                const count = Math.floor(Math.random() * 3);
+                document.getElementById('current-count').innerHTML = `${count} <span>Objects</span>`;
+                if(count > 0) {
+                    document.getElementById('avg-confidence').innerHTML = `${(75 + Math.random() * 20).toFixed(1)} <span>%</span>`;
+                    if(Math.random() > 0.8) {
+                        addLog("경보: 부유물 탐지됨 (Confidence: 92%)", true);
+                    }
+                } else {
+                    document.getElementById('avg-confidence').innerHTML = `0 <span>%</span>`;
+                }
+            }
+        }, 3000);
+    </script>
+</body>
+</html>

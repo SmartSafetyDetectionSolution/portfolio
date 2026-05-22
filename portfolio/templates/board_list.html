@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="board-container">
+    <a href="/" class="nav-back">← 메인으로 돌아가기</a>
+    <div class="board-header">
+        <h1 class="board-title">CRUD 게시판</h1>
+        <div class="board-actions-wrapper">
+            <form action="/board" method="GET" class="search-form">
+                <input type="text" name="search" value="{{ search_query }}" placeholder="검색어 입력..." class="search-input">
+                <button type="submit" class="btn btn-outline search-btn">🔍</button>
+            </form>
+            <a href="/board/create" class="btn btn-primary">🖋️ 글쓰기</a>
+        </div>
+    </div>
+
+    <div class="sort-options">
+        <a href="/board?sort=created_at&search={{ search_query }}" class="{{ 'active' if sort_by == 'created_at' else '' }}">최신순</a>
+        <a href="/board?sort=title&search={{ search_query }}" class="{{ 'active' if sort_by == 'title' else '' }}">제목순</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="board-table">
+            <thead>
+                <tr>
+                    <th style="width: 8%">ID</th>
+                    <th style="width: 50%">제목</th>
+                    <th style="width: 15%">작성자</th>
+                    <th style="width: 27%">작성일</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                <tr>
+                    <td>{{ post.id }}</td>
+                    <td>
+                        <a href="/board/{{ post.id }}" class="post-link">{{ post.title }}</a>
+                    </td>
+                    <td><span class="author-badge">{{ post.author }}</span></td>
+                    <td class="date-cell">{{ post.created_at[:10] }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" class="empty-msg">
+                        <div class="empty-icon">📭</div>
+                        아직 게시글이 없습니다. 첫 번째 글을 작성해보세요!
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .board-container {
+        max-width: 1000px;
+        margin: 120px auto 60px;
+        padding: 40px;
+        background: var(--bg-card);
+        border: 1px solid var(--bg-glass-border);
+        border-radius: var(--radius-lg);
+        backdrop-filter: blur(20px);
+    }
+
+    .board-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .board-title {
+        font-size: var(--font-size-3xl);
+        font-weight: 800;
+        background: var(--gradient-hero);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .board-actions-wrapper {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .search-form { display: flex; gap: 8px; }
+    .search-input {
+        padding: 8px 16px;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--bg-glass-border);
+        background: var(--bg-glass);
+        color: white;
+        outline: none;
+    }
+
+    .sort-options {
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        font-size: 0.85rem;
+    }
+    .sort-options a { color: var(--text-muted); }
+    .sort-options a.active { color: var(--accent-primary); font-weight: bold; }
+
+    .board-table { width: 100%; border-collapse: collapse; }
+    .board-table th, .board-table td { padding: 16px; text-align: left; border-bottom: 1px solid var(--bg-glass-border); }
+    .board-table th { color: var(--accent-primary); font-weight: 600; font-size: var(--font-size-sm); }
+    .board-table tr:hover { background: rgba(255, 255, 255, 0.02); }
+
+    .post-link { transition: var(--transition-fast); }
+    .post-link:hover { color: var(--accent-primary); padding-left: 5px; }
+
+    .author-badge {
+        padding: 4px 10px;
+        background: rgba(52, 211, 153, 0.1);
+        color: var(--accent-secondary);
+        border-radius: 50px;
+        font-size: var(--font-size-xs);
+    }
+
+    .empty-msg { text-align: center; padding: 60px; color: var(--text-muted); }
+    .empty-icon { font-size: 3rem; margin-bottom: 10px; }
+    .nav-back { margin-bottom: 20px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 8px; }
+    .nav-back:hover { color: var(--accent-primary); }
+</style>
+{% endblock %}

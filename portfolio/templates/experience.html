@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section" id="experience">
+    <span class="section-label">Experience</span>
+    <h2 class="section-title">경험 & 교육</h2>
+    <p class="section-subtitle">방송 현장에서 쌓은 미적 감각과 개발자로서의 집요함</p>
+
+    <div class="timeline">
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2023. 01 - 2024. 12</div>
+            <div class="timeline-title">FD (사건파일 24)</div>
+            <div class="timeline-company">TV조선</div>
+            <div class="timeline-description">
+                <ul>
+                    <li>스튜디오 세팅 및 관련 관리 업무 수행</li>
+                    <li>패널 및 진행자 마이크 착용, 의상 및 소품 체크</li>
+                    <li>프로그램 녹화 및 전체 리허설 지원</li>
+                    <li>
+                        <a href="https://www.youtube.com/watch?v=2kyjmZOFNmk" target="_blank" class="exp-link">📺 [본편영상 1]</a> 
+                        <a href="https://www.youtube.com/live/QoB6YHZVxK8?si=qQrqKiKh2x9xnOab" target="_blank" class="exp-link">📺 [본편영상 2]</a>
+                    </li>
+                </ul>
+                <div class="exp-gallery-inline">
+                    <div class="exp-thumb" data-caption="TV조선 사건파일 24 스튜디오 및 현장 스케치">
+                        <img src="{{ url_for('static', filename='images/exp_tvchosun.png') }}" alt="TV조선 경력 이미지" loading="lazy">
+                        <span class="exp-thumb-label">📸 현장 사진 보기</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2022. 09 - 2022. 12</div>
+            <div class="timeline-title">조연출 (KBS1 대기획 키스 더 유니버스)</div>
+            <div class="timeline-company">한국방송공사(KBS)</div>
+            <div class="timeline-description">
+                <ul>
+                    <li>PD 촬영 및 편집 지원, 관련 자료 탐색 및 아카이빙</li>
+                    <li>예고 영상 편집 및 스튜디오 백(Background) 영상 편집</li>
+                    <li>Adobe Premiere Pro, After Effects 활용 전문 편집</li>
+                    <li>
+                        <a href="https://youtu.be/MvxWq3_GCCM?si=nf67jJZHgqe9oOWv" target="_blank" class="exp-link">📺 [본편영상]</a> 
+                        <a href="https://youtu.be/SIVeR0n94h0?si=dXs4sycJCtIPpqN8" target="_blank" class="exp-link">📺 [예고영상]</a>
+                    </li>
+                </ul>
+                <div class="exp-gallery-inline">
+                    <div class="exp-thumb" data-caption="KBS1 대기획 키스 더 유니버스 작업물 및 편집 화면">
+                        <img src="{{ url_for('static', filename='images/exp_kbs.png') }}" alt="KBS 경력 이미지" loading="lazy">
+                        <span class="exp-thumb-label">📸 현장 사진 보기</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2021. 11 - 2022. 07</div>
+            <div class="timeline-title">조연출 (MBN 천기누설)</div>
+            <div class="timeline-company">더케이미디어</div>
+            <div class="timeline-description">
+                <ul>
+                    <li>PD 촬영 지원 및 종합 편집 보조, 자료 탐색</li>
+                    <li>예고 영상 편집 및 회차별 제작비 정산 관리</li>
+                    <li>Final Cut 7 활용 영상 편집 및 송출 지원</li>
+                    <li>
+                        <a href="https://youtu.be/nd4tRk4tRk4?si=2loguRIozm7x7S05" target="_blank" class="exp-link">📺 [참여영상]</a> 
+                        <a href="https://naver.me/5t7PVYYu" target="_blank" class="exp-link">📺 [예고편집본]</a>
+                    </li>
+                </ul>
+                <div class="exp-gallery-inline">
+                    <div class="exp-thumb" data-caption="MBN 천기누설 참여 영상 및 예고 편집본">
+                        <img src="{{ url_for('static', filename='images/exp_mbn.png') }}" alt="MBN 경력 이미지" loading="lazy">
+                        <span class="exp-thumb-label">📸 현장 사진 보기</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2026</div>
+            <div class="timeline-title">Frontend & Web Service Development</div>
+            <div class="timeline-company">개인 프로젝트</div>
+            <div class="timeline-description">
+                <ul>
+                    <li>사용자 경험 중심의 웹 인터페이스 설계 및 구현</li>
+                    <li>Flask 기반 백엔드 로직 연동 및 데이터 시각화</li>
+                    <li>실시간 객체 탐지(AI) 데이터 모니터링 대시보드 구축</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<!-- Lightbox (사진 확대) -->
+<div id="lightbox" class="lightbox">
+    <div class="lightbox-content">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-img" src="" alt="확대 이미지">
+        <p class="lightbox-caption"></p>
+    </div>
+</div>
+
+<style>
+    .exp-link {
+        display: inline-block;
+        margin-right: 12px;
+        margin-top: 8px;
+        font-size: 0.9rem;
+        color: var(--accent-primary);
+        font-weight: 500;
+        transition: var(--transition-fast);
+    }
+    .exp-link:hover {
+        transform: translateX(3px);
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}

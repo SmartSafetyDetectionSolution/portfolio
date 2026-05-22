@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section" id="about">
+    <span class="section-label">About Me</span>
+    <h2 class="section-title">저를 소개합니다</h2>
+    <p class="section-subtitle">기술로 사용자 가치를 만드는 개발자</p>
+
+    <div class="about-grid">
+        <div class="about-text animate-on-scroll">
+            <p>
+                <strong>영상미학적 감각을 웹 인터랙션으로 승화시키는 프론트엔드 개발자 이강연입니다.</strong>
+            </p>
+            <p>
+                <strong>[Main: Frontend]</strong> 영화 및 방송 제작 현장에서 다진 미적 감각을 바탕으로, 단순한 화면 구현을 넘어 사용자가 즐거움을 느끼는 인터랙션을 설계합니다. HTML/CSS/JS를 무기로 직관적인 UI를 창조합니다.
+            </p>
+            <p>
+                <strong>[Sub: Backend & AI]</strong> 개발의 전체 흐름을 이해하기 위해 Flask와 YOLO(AI)를 직접 다루며 데이터 처리 과정을 익혔습니다. 
+                <span style="color: var(--accent-primary); font-weight: 700;">"서버 로직을 깊이 있게 이해하는 프론트엔드 개발자"</span>로서 협업 시 백엔드 팀과 원활한 소통이 가능하며, 데이터 최적화를 고려한 화면을 만듭니다.
+            </p>
+            <p>
+                <strong>[Value]</strong> 복잡한 기술도 결국 사용자가 편하게 사용할 수 있어야 가치가 있다고 믿습니다. 데이터를 가장 아름답고 명확하게 시각화하는 전문가로 성장하겠습니다.
+            </p>
+            <div style="margin-top: 32px;">
+                <a href="{{ url_for('static', filename='resume.pdf') }}" class="btn btn-primary" download>
+                    📄 이력서 다운로드 (PDF)
+                </a>
+            </div>
+        </div>
+        <div class="about-info-cards animate-on-scroll">
+            <div class="info-card">
+                <div class="card-icon">🎓</div>
+                <div class="card-title">Education</div>
+                <div class="card-value">한국영상대학교 영화영상과</div>
+            </div>
+            <div class="info-card">
+                <div class="card-icon">📍</div>
+                <div class="card-title">Location</div>
+                <div class="card-value">경기도 수원시</div>
+            </div>
+            <div class="info-card">
+                <div class="card-icon">💼</div>
+                <div class="card-title">Status</div>
+                <div class="card-value">구직 중</div>
+            </div>
+            <div class="info-card">
+                <div class="card-icon">🔥</div>
+                <div class="card-title">Interest</div>
+                <div class="card-value">AI Visualization & UX</div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section" id="skills">
+    <span class="section-label">Skills</span>
+    <h2 class="section-title">기술 스택</h2>
+    <p class="section-subtitle">프론트엔드 중심의 전문성과 백엔드 이해도</p>
+
+    <!-- 숙련도 범례 추가 -->
+    <div class="skills-legend" style="display: flex; gap: 24px; margin-bottom: 40px; justify-content: center; padding: 12px; background: var(--bg-card); border-radius: 50px; border: 1px solid var(--bg-glass-border); width: fit-content; margin-left: auto; margin-right: auto; font-size: 0.85rem;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="skill-dot expert" style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
+            <span style="color: var(--text-secondary); font-weight: 600;">Expert (능숙)</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="skill-dot advanced" style="width: 10px; height: 10px; border-radius: 50%; background: #6366f1; display: inline-block;"></span>
+            <span style="color: var(--text-secondary); font-weight: 600;">Advanced (활용 가능)</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="skill-dot intermediate" style="width: 10px; height: 10px; border-radius: 50%; background: #f59e0b; display: inline-block;"></span>
+            <span style="color: var(--text-secondary); font-weight: 600;">Basic (기초/학습 중)</span>
+        </div>
+    </div>
+
+
+    <div class="skills-grid">
+        <div class="skill-category">
+            <div class="skill-category-header">
+                <div class="skill-category-icon frontend">🎨</div>
+                <div class="skill-category-name">Frontend (Core)</div>
+            </div>
+            <div class="skill-items">
+                <span class="skill-tag"><span class="skill-dot expert"></span>HTML5 / CSS3</span>
+                <span class="skill-tag"><span class="skill-dot expert"></span>JavaScript (ES6+)</span>
+                <span class="skill-tag"><span class="skill-dot advanced"></span>UI/UX Interaction</span>
+                <span class="skill-tag"><span class="skill-dot advanced"></span>React 기초</span>
+                <span class="skill-tag"><span class="skill-dot advanced"></span>Responsive Design</span>
+            </div>
+        </div>
+
+        <div class="skill-category">
+            <div class="skill-category-header">
+                <div class="skill-category-icon backend">⚙️</div>
+                <div class="skill-category-name">Backend / AI (Sub)</div>
+            </div>
+            <div class="skill-items">
+                <span class="skill-tag"><span class="skill-dot advanced"></span>Python / Flask</span>
+                <span class="skill-tag"><span class="skill-dot intermediate"></span>SQLite / MySQL</span>
+                <span class="skill-tag"><span class="skill-dot intermediate"></span>RESTful API</span>
+                <span class="skill-tag"><span class="skill-dot intermediate"></span>OpenCV / YOLO</span>
+            </div>
+        </div>
+
+        <div class="skill-category">
+            <div class="skill-category-header">
+                <div class="skill-category-icon tools">🛠️</div>
+                <div class="skill-category-name">Tools & Workflow</div>
+            </div>
+            <div class="skill-items">
+                <span class="skill-tag"><span class="skill-dot expert"></span>Git / GitHub</span>
+                <span class="skill-tag"><span class="skill-dot advanced"></span>VS Code</span>
+                <span class="skill-tag"><span class="skill-dot intermediate"></span>Linux / Docker</span>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
