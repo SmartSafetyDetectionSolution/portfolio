@@ -20,11 +20,17 @@ except ImportError:
 app = Flask(__name__)
 app.secret_key = 'portfolio_secret_key_2026'
 
-UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads')
+IS_VERCEL = os.environ.get('VERCEL') == '1'
+
+if IS_VERCEL:
+    UPLOAD_FOLDER = '/tmp/uploads'
+    DB_PATH = '/tmp/messages.db'
+else:
+    UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads')
+    DB_PATH = os.path.join(os.path.dirname(__file__), 'messages.db')
+
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-DB_PATH = os.path.join(os.path.dirname(__file__), 'messages.db')
 
 # ===== 네이버 이메일 설정 (보안 강화를 위해 465 SSL 권장) =====
 SMTP_SERVER = 'smtp.naver.com'
@@ -79,7 +85,8 @@ def send_email_notification(name, sender_email, phone, message, file_path=None):
     except Exception as e:
         print(f"[EMAIL] ❌ 전송 실패 상세 정보: {str(e)}")
         # 에러 발생 시 로그 파일에 기록 (디버깅용)
-        with open('email_error.log', 'a', encoding='utf-8') as f:
+        log_path = '/tmp/email_error.log' if IS_VERCEL else 'email_error.log'
+        with open(log_path, 'a', encoding='utf-8') as f:
             f.write(f"[{datetime.now()}] {name}님의 메시지 전송 실패: {str(e)}\n")
 
 def get_db():
